@@ -1,0 +1,22 @@
+{
+    "__comment1__": "Keys",
+    "gpt-3.5_keys": ["sk-***", ["sk-***", "sk-***"]],
+    "gpt-4_keys": ["sk-***", ["sk-***", "sk-***"]],
+    "claude_keys": ["sk-***", ["sk-***", "sk-***"]],
+    "huggingface_key": "hf_***",
+
+    "__comment2__": "Generation Config",
+    "year": "2023",
+    "cutoff_date": "2023-03-31",
+    "model": "gpt-4-0613",
+    "model_guess": "gpt-4-1106-preview",
+    "instance_per_word": 1,
+    "term_per_category": 100,
+    "selected_type": ["new words not deduced", "new phrases not deduced", "frequently word not deduced"],
+    "google_custom_search_API": "***",
+    "google_search_engine_ID": "***",
+
+    "__comment3__": "Human Filtering Config",
+    "need_translation": true,
+    "language": "Chinese"
+}
