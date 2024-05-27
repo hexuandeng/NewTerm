@@ -1,4 +1,4 @@
-# NewTerm: Benchmarking Real-Time New Terms for Large Language Models
+# NewTerm: Benchmarking Real-Time New Terms for LLMs
 
 This repository hosts the the code and benchmark for the paper "***NewTerm**: Benchmarking Real-Time New Terms for Large Language Models*". We've developed a highly automated pipeline for new term benchmarks, which requires minimal human intervention, ensuring high-quality and flexible updates for real-time information. Further, we construct **NewTerm 2022** and **NewTerm 2023**, focusing on new words, new phrases, and old words with new meanings, and will **continue updating annually**. You can use ***NewTerm*** to:
 
