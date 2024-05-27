@@ -111,11 +111,7 @@ Results are in the benchmark_{year} folder, named by task for COMA, COST, and CS
 ### Detailed Process
 
 The detailed process is described in our paper and illustrated as follows:
-
-<p align="center">
-<img src="./pic/benchmark.png" width="1000" />
-</p>
-
+![](./pic/benchmark.png)
 - [New Term Filter](code/1_new_term_filter.py) code served as the "New Term Selection" module;
 - [Term Generation](code/2_term_generation.py) code served as the "Related Term Generation" module;
 - [COMA Generation](code/3_COMA_generation.py), [COST Generation](code/3_COST_generation.py), [CSJ Generation](code/3_CSJ_generation.py) code complete the construction process for each task;
