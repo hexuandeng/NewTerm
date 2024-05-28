@@ -14,9 +14,9 @@ Our benchmark includes three open-domain NLU tasks. The cases for these tasks ar
 ## Large Language Models (LLMs) Evaluation
 
 We evaluate LLMs using our generated benchmarks, **NewTerm 2022** and **NewTerm 2023**, located in the [benchmark_2022](benchmark_2022/) and [benchmark_2023](benchmark_2023/) folder, respectively. These folders contain the following files:
-- new_terms.txt: Include the most challenging new terms we selected.
-- COMA.json, COST.json, and CSJ.json: Include the automatically generated benchmarks, covering all three tasks defined in our paper.
-- COMA_clean.json, COST_clean.json, and CSJ_clean.json: Include the benchmarks after human filtering.
+- new_terms.jsonl: Include the most challenging new terms we selected.
+- COMA.jsonl, COST.jsonl, and CSJ.jsonl: Include the automatically generated benchmarks, covering all three tasks defined in our paper.
+- COMA_clean.jsonl, COST_clean.jsonl, and CSJ_clean.jsonl: Include the benchmarks after human filtering.
 
 
 ### Prerequisites
@@ -150,4 +150,4 @@ Now, you can interact with NewTerm through the provided interface. The website I
       ![](./pic/interface1.png)
    - Answering page: We separate different tasks into different pages, with each page containing at most ten questions. Only one choice is allowed. If no choices are correct, please choose "None". If multiple choices are correct, please choose "Others" and manually input all the correct choices. Answers are saved after annotators finish any page, making it easy for them to skip and continue at any time.
       ![](./pic/interface2.png)
-4. After completing the annotation, use the [human_filtering](human_filtering/human_filtering.py) code to generate the final benchmark, stored in the benchmark_{year} folder with the suffix "_clean", as COMA_clean.json, COST_clean.json, and CSJ_clean.json.
+4. After completing the annotation, use the [human_filtering](human_filtering/human_filtering.py) code to generate the final benchmark, stored in the benchmark_{year} folder with the suffix "_clean", as COMA_clean.jsonl, COST_clean.jsonl, and CSJ_clean.jsonl.

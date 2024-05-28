@@ -8,13 +8,13 @@ def test_open_source(task, prompt_type, model_name, year):
     model, tokenizer = load_open_source(model_name)
     if prompt_type == '_few_rand':
         few = []
-        with open(f'benchmark_{year}/{task}_clean.json', 'r', encoding='utf-8') as f:
+        with open(f'benchmark_{year}/{task}_clean.jsonl', 'r', encoding='utf-8') as f:
             for line in f:
                 line = json.loads(line.strip())
                 few.append(line)
     
-    with open(f'benchmark_{year}/{task}_clean.json', 'r', encoding='utf-8') as f,\
-        open(f'newterm/results_{year}/{task}_{model_name.split("/")[-1]}{prompt_type}.json', 'w', encoding='utf-8') as w:
+    with open(f'benchmark_{year}/{task}_clean.jsonl', 'r', encoding='utf-8') as f,\
+        open(f'newterm/results_{year}/{task}_{model_name.split("/")[-1]}{prompt_type}.jsonl', 'w', encoding='utf-8') as w:
         for line in f:
             line = json.loads(line.strip())
             for p in range(3):
@@ -42,13 +42,13 @@ def test_api(task, prompt_type, model_name, year):
     with open("config.json", 'r', encoding='utf-8') as f:
         config = json.load(f)
     chat = MultiChat(config,
-        save_path=f"newterm/results_{year}/{task}_{model_name}{prompt_type}.json",
+        save_path=f"newterm/results_{year}/{task}_{model_name}{prompt_type}.jsonl",
         model=model_name,
         temperature=0
     )
     chat.start()
     
-    with open(f'benchmark_{year}/{task}_clean.json', 'r', encoding='utf-8') as f:
+    with open(f'benchmark_{year}/{task}_clean.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line.strip())
             for p in range(3):

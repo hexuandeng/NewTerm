@@ -12,14 +12,13 @@ if __name__ == "__main__":
         config = json.load(f)
 
     chat = MultiChat(config,
-        save_path=f'buffer_{config["year"]}/new_term_guess.json',
+        save_path=f'buffer_{config["year"]}/new_term_guess.jsonl',
         model=config["model"],
         temperature=0
     )
     chat.start()
-    with open(f'buffer_{config["year"]}/new_terms_raw.json', 'r', encoding='utf-8') as f:
+    with open(f'buffer_{config["year"]}/new_terms_raw.txt', 'r', encoding='utf-8') as f:
         for line in f:
-            line = json.loads(line)
             line = line.strip().split('\t')
             if '(' in line[0] and ')' in line[0]:
                 if line[0].strip()[-1] != ')':
@@ -39,16 +38,16 @@ if __name__ == "__main__":
     model = SentenceTransformer('whaleloops/phrase-bert').cuda()
     used = []
     cnt = 0
-    if os.path.exists(f'buffer_{config["year"]}/new_term_google.json'):
-        with open(f'buffer_{config["year"]}/new_term_google.json', 'r', encoding='utf-8') as f:
+    if os.path.exists(f'buffer_{config["year"]}/new_term_google.jsonl'):
+        with open(f'buffer_{config["year"]}/new_term_google.jsonl', 'r', encoding='utf-8') as f:
             for line in f:
                 line = json.loads(line)
                 del line['count']
                 used.append(line)
     chat.wait_finish()
-    logger.info('Starting generating and writing to buffer/new_term_google.json!')
-    with open(f'buffer_{config["year"]}/new_term_guess.json', 'r', encoding='utf-8') as f,\
-        open(f'buffer_{config["year"]}/new_term_google.json', 'a', encoding='utf-8') as w:
+    logger.info('Starting generating and writing to buffer/new_term_google.jsonl!')
+    with open(f'buffer_{config["year"]}/new_term_guess.jsonl', 'r', encoding='utf-8') as f,\
+        open(f'buffer_{config["year"]}/new_term_google.jsonl', 'a', encoding='utf-8') as w:
         for line in f:
             line = json.loads(line)
             if line in used:
@@ -62,11 +61,11 @@ if __name__ == "__main__":
                 line['count'] = int(data['queries']['request'][0]['totalResults'])
             w.write(json.dumps(line, sort_keys=True, indent=0, ensure_ascii=False).replace("\n", " ") + "\n")
             cnt += 1
-    logger.info(f'Finish generating {cnt} instances in buffer/new_term_google.json!')
+    logger.info(f'Finish generating {cnt} instances in buffer/new_term_google.jsonl!')
 
     all_score = defaultdict(list)
     mem = {}
-    with open(f'buffer_{config["year"]}/new_term_google.json', 'r', encoding='utf-8') as f:
+    with open(f'buffer_{config["year"]}/new_term_google.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line)
             asw = cos_sim(model.encode(line['response']), model.encode(line['meaning']))
@@ -86,7 +85,7 @@ if __name__ == "__main__":
         ('google', True): [10, all_score[('google', True)][int(len(all_score[('google', True)]) / 2)]],
         ('google', False): [10, all_score[('google', False)][int(len(all_score[('google', False)]) / 2)]]
     }
-    with open(f'benchmark_{config["year"]}/new_terms.txt', 'w', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/new_terms.jsonl', 'w', encoding='utf-8') as f:
         for cat in config['selected_type']:
             logger.info(f'Selecting {cat}!')
             if 'word' in cat:

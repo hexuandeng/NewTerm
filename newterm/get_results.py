@@ -12,8 +12,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     by_model = defaultdict(lambda: defaultdict(list))
-    comas = sorted(glob.glob(f'newterm/results_{args.year}/COMA*.json'))
-    costs = sorted(glob.glob(f'newterm/results_{args.year}/COST*.json'))
+    comas = sorted(glob.glob(f'newterm/results_{args.year}/COMA*.jsonl'))
+    costs = sorted(glob.glob(f'newterm/results_{args.year}/COST*.jsonl'))
     for file in comas + costs:
         cor = inv = tot = 0
         with open(file, 'r', encoding='utf-8') as f:
@@ -47,15 +47,15 @@ if __name__ == "__main__":
             # print(file, round(cor / tot * 100, 2), inv / tot)
             model = file.split('/')[-1].split('_')[1]
             if '_few_gold' in file:
-                by_model[model.rstrip('.json')]["FEW_SHOT_GOLD"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["FEW_SHOT_GOLD"].append(cor / tot * 100)
             elif '_few' in file:
-                by_model[model.rstrip('.json')]["FEW_SHOT"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["FEW_SHOT"].append(cor / tot * 100)
             elif '_gold' in file:
-                by_model[model.rstrip('.json')]["GOLD"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["GOLD"].append(cor / tot * 100)
             else:
-                by_model[model.rstrip('.json')]["BASE"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["BASE"].append(cor / tot * 100)
 
-    csjs = sorted(glob.glob(f'newterm/results_{args.year}/CSJ*.json'))
+    csjs = sorted(glob.glob(f'newterm/results_{args.year}/CSJ*.jsonl'))
     for file in csjs:
         cor = inv = tot = 0
         with open(file, 'r', encoding='utf-8') as f:
@@ -80,13 +80,13 @@ if __name__ == "__main__":
             # print(file, round(cor / tot * 100, 2), inv / tot)
             model = file.split('/')[-1].split('_')[1]
             if '_few_gold' in file:
-                by_model[model.rstrip('.json')]["FEW_SHOT_GOLD"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["FEW_SHOT_GOLD"].append(cor / tot * 100)
             elif '_few' in file:
-                by_model[model.rstrip('.json')]["FEW_SHOT"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["FEW_SHOT"].append(cor / tot * 100)
             elif '_gold' in file:
-                by_model[model.rstrip('.json')]["GOLD"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["GOLD"].append(cor / tot * 100)
             else:
-                by_model[model.rstrip('.json')]["BASE"].append(cor / tot * 100)
+                by_model[model.rstrip('.jsonl')]["BASE"].append(cor / tot * 100)
 
     for k, v in by_model.items():
         for prompt, results in v.items():

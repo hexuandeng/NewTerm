@@ -54,19 +54,19 @@ if __name__ == "__main__":
                 }
         
     chat = MultiChat(config,
-        save_path=f"benchmark_{YEAR}/translation.json",
+        save_path=f"benchmark_{YEAR}/translation.jsonl",
         model=config["model"],
         temperature=0
     )
     chat.start()
-    with open(f"benchmark_{YEAR}/COMA.json", 'r', encoding='utf-8') as f:
+    with open(f"benchmark_{YEAR}/COMA.jsonl", 'r', encoding='utf-8') as f:
         for cnt, line in enumerate(f):
             line = json.loads(line)
             chat.post(get_dict(line['meaning']))
             chat.post(get_dict(line['question'] + f"{'This happened because:' if line['split'] == 'cause' else 'As an effect,'} ...", line['term'], line['meaning']))
             for it in line['choices']:
                 chat.post(get_dict(it))
-    with open(f"benchmark_{YEAR}/COST.json", 'r', encoding='utf-8') as f:
+    with open(f"benchmark_{YEAR}/COST.jsonl", 'r', encoding='utf-8') as f:
         for cnt, line in enumerate(f):
             line = json.loads(line)
             chat.post(get_dict(line['meaning']))
@@ -75,7 +75,7 @@ if __name__ == "__main__":
                 if it.lower() == line['term'].lower():
                     continue
                 chat.post(get_dict(it))
-    with open(f"benchmark_{YEAR}/CSJ.json", 'r', encoding='utf-8') as f:
+    with open(f"benchmark_{YEAR}/CSJ.jsonl", 'r', encoding='utf-8') as f:
         for cnt, line in enumerate(f):
             line = json.loads(line)
             chat.post(get_dict(line['meaning']))

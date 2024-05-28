@@ -40,13 +40,13 @@ if __name__ == "__main__":
             return True, mem
         chat = MultiChat(config,
             retry_func=retry_func,
-            save_path=f"buffer_{config["year"]}/COMA_{dataset}_generation.json",
+            save_path=f"buffer_{config["year"]}/COMA_{dataset}_generation.jsonl",
             model=config["model"],
             temperature=0.8,
             presence_penalty=0.8
         )
         chat.start()
-        with open(f"benchmark_{config["year"]}/term_generation.json", "r", encoding="utf-8") as f:
+        with open(f"benchmark_{config["year"]}/term_generation.jsonl", "r", encoding="utf-8") as f:
             for line in f:
                 line = json.loads(line)
                 lsb = {
@@ -71,13 +71,13 @@ if __name__ == "__main__":
         chat.wait_finish()
 
         chat = MultiChat(config,
-            save_path=f"buffer_{config["year"]}/COMA_{dataset}_generation_choice.json",
+            save_path=f"buffer_{config["year"]}/COMA_{dataset}_generation_choice.jsonl",
             model=config["model"],
             temperature=0.8,
             presence_penalty=0.8
         )
         chat.start()
-        with open(f"buffer_{config["year"]}/COMA_{dataset}_generation.json", "r", encoding="utf-8") as f:
+        with open(f"buffer_{config["year"]}/COMA_{dataset}_generation.jsonl", "r", encoding="utf-8") as f:
             for line in f:
                 line = json.loads(line)
                 term = line["term"]
@@ -121,13 +121,13 @@ if __name__ == "__main__":
         chat.wait_finish()
 
         chat = MultiChat(config,
-            save_path=f"buffer_{config["year"]}/COMA_{dataset}_generation_filter.json",
+            save_path=f"buffer_{config["year"]}/COMA_{dataset}_generation_filter.jsonl",
             model=config["model"],
             temperature=0
         )
         chat.start()
         mem = defaultdict(list)
-        with open(f"buffer_{config["year"]}/COMA_{dataset}_generation_choice.json", "r", encoding="utf-8") as f:
+        with open(f"buffer_{config["year"]}/COMA_{dataset}_generation_choice.jsonl", "r", encoding="utf-8") as f:
             for line in f:
                 line = json.loads(line)
                 if line["choice"].lower() not in line["response"].lower():
@@ -179,7 +179,7 @@ if __name__ == "__main__":
             sp = "As an effect"
             sp_full = "As an effect ,"
 
-        with open(f"buffer_{config["year"]}/COMA_{dataset}_generation_filter.json", "r", encoding="utf-8") as f:
+        with open(f"buffer_{config["year"]}/COMA_{dataset}_generation_filter.jsonl", "r", encoding="utf-8") as f:
             for line in f:
                 line = json.loads(line)
                 mem = ["A", "B", "C", "D", "E", "F"][: len(line["choices"])]
@@ -209,7 +209,7 @@ if __name__ == "__main__":
                 by_word[(line['term'], line['meaning'])].append([line['question'], choices, asw, sp])
 
     to_type = {}
-    with open(f'benchmark_{config["year"]}/new_terms.txt', 'r', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/new_terms.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line)
             to_type[(line['term'], line['meaning'])] = line['type']
@@ -251,7 +251,7 @@ if __name__ == "__main__":
 
         return final
 
-    with open(f'benchmark_{config["year"]}/COMA.json', 'w', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/COMA.jsonl', 'w', encoding='utf-8') as f:
         for k, v in get_final(by_word, config["instance_per_word"]).items():
             for it in v:
                 it['type'] = k

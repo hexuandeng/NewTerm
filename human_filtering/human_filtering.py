@@ -69,8 +69,8 @@ if __name__ == "__main__":
     print('Total Correct Rate:', a / b)
 
     for data in ['COMA', 'CSJ']:
-        with open(f"benchmark_{YEAR}/{data}.json", 'r', encoding='utf-8') as f,\
-            open(f"benchmark_{YEAR}/{data}_clean.json", 'w', encoding='utf-8') as w:
+        with open(f"benchmark_{YEAR}/{data}.jsonl", 'r', encoding='utf-8') as f,\
+            open(f"benchmark_{YEAR}/{data}_clean.jsonl", 'w', encoding='utf-8') as w:
             for cnt, line in enumerate(f):
                 js = json.loads(line)
                 flag = False
@@ -80,8 +80,8 @@ if __name__ == "__main__":
                         break
                 if not flag:
                     w.write(line)
-    with open(f"benchmark_{YEAR}/COST.json", 'r', encoding='utf-8') as f,\
-        open(f"benchmark_{YEAR}/COST_clean.json", 'w', encoding='utf-8') as w:
+    with open(f"benchmark_{YEAR}/COST.jsonl", 'r', encoding='utf-8') as f,\
+        open(f"benchmark_{YEAR}/COST_clean.jsonl", 'w', encoding='utf-8') as w:
         for cnt, line in enumerate(f):
             js = json.loads(line)
             flag = False

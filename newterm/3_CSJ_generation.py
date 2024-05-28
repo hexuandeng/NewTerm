@@ -28,13 +28,13 @@ if __name__ == "__main__":
         return True, mem
     chat = MultiChat(config,
         retry_func=retry_func,
-        save_path=f"buffer_{config["year"]}/CSJ_generation.json",
+        save_path=f"buffer_{config["year"]}/CSJ_generation.jsonl",
         model=config["model"],
         temperature=0.8,
         presence_penalty=0.8
     )
     chat.start()
-    with open(f"benchmark_{config["year"]}/term_generation.json", "r", encoding="utf-8") as f:
+    with open(f"benchmark_{config["year"]}/term_generation.jsonl", "r", encoding="utf-8") as f:
         for line in f:
             line = json.loads(line)
             line["phrases"] = filter_sim(line["phrases"], 5, model)
@@ -89,13 +89,13 @@ if __name__ == "__main__":
         return True, mem
     chat = MultiChat(config,
         retry_func=retry_func,
-        save_path=f"buffer_{config["year"]}/CSJ_generation.json",
+        save_path=f"buffer_{config["year"]}/CSJ_generation.jsonl",
         model=config["model"],
         temperature=0.8,
         presence_penalty=0.8
     )
     chat.start()
-    with open(f"buffer_{config["year"]}/CSJ_generation.json", "r", encoding="utf-8") as f:
+    with open(f"buffer_{config["year"]}/CSJ_generation.jsonl", "r", encoding="utf-8") as f:
         for line in f:
             line = json.loads(line)
             if not line['answer']:
@@ -130,12 +130,12 @@ if __name__ == "__main__":
     chat.wait_finish()
 
     chat = MultiChat(config,
-        save_path=f"buffer_{config["year"]}/CSJ_generation_filter.json",
+        save_path=f"buffer_{config["year"]}/CSJ_generation_filter.jsonl",
         model=config["model"],
         temperature=0
     )
     chat.start()
-    with open(f"buffer_{config["year"]}/CSJ_generation.json", "r", encoding="utf-8") as f:
+    with open(f"buffer_{config["year"]}/CSJ_generation.jsonl", "r", encoding="utf-8") as f:
         for line in f:
             line = json.loads(line)
             questions = []
@@ -170,7 +170,7 @@ if __name__ == "__main__":
     chat.wait_finish()
 
     by_word = defaultdict(list)
-    with open(f"buffer_{config["year"]}/CSJ_generation_filter.json", "r", encoding="utf-8") as f:
+    with open(f"buffer_{config["year"]}/CSJ_generation_filter.jsonl", "r", encoding="utf-8") as f:
         for line in f:
             line = json.loads(line)
             try:
@@ -186,7 +186,7 @@ if __name__ == "__main__":
             by_word[(line['term'], line['meaning'])].append([line['question'], line['answer']])
                 
     to_type = {}
-    with open(f'benchmark_{config["year"]}/new_terms.txt', 'r', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/new_terms.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line)
             to_type[(line['term'], line['meaning'])] = line['type']
@@ -229,7 +229,7 @@ if __name__ == "__main__":
 
         return final
 
-    with open(f'benchmark_{config["year"]}/CSJ.json', 'w', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/CSJ.jsonl', 'w', encoding='utf-8') as f:
         for k, v in get_final(by_word, config["instance_per_word"]).items():
             for it in v:
                 it['type'] = k

@@ -23,7 +23,7 @@ def get_data(username, num, load):
         if need_translation:
             translation = {}
             trans_lower = {}
-            with open(f"../benchmark_{YEAR}/translation.json", 'r', encoding='utf-8') as f:
+            with open(f"../benchmark_{YEAR}/translation.jsonl", 'r', encoding='utf-8') as f:
                 for line in f:
                     line = json.loads(line)
                     translation[line['sentence']] = line['response']
@@ -39,7 +39,7 @@ def get_data(username, num, load):
                 return ''
         
         questions = []
-        with open(f"../benchmark_{YEAR}/COMA.json", 'r', encoding='utf-8') as f:
+        with open(f"../benchmark_{YEAR}/COMA.jsonl", 'r', encoding='utf-8') as f:
             for cnt, line in enumerate(f):
                 line = json.loads(line)
                 questions.append({"type": "radiogroup",
@@ -49,7 +49,7 @@ def get_data(username, num, load):
                             "choicesOrder": "random",
                             "choices": [i + "<br><font color='gray'><em>Translation:</em> " + translate(i) + '</font>' for i in line['choices']],
                             "correctAnswer": line['choices'][line['gold']] + "<br><font color='gray'><em>Translation:</em> " + translate(line['choices'][line['gold']]) + "</font>"})
-        with open(f"../benchmark_{YEAR}/COST.json", 'r', encoding='utf-8') as f:
+        with open(f"../benchmark_{YEAR}/COST.jsonl", 'r', encoding='utf-8') as f:
             for cnt, line in enumerate(f):
                 line = json.loads(line)
                 questions.append({"type": "radiogroup",
@@ -59,7 +59,7 @@ def get_data(username, num, load):
                             "choicesOrder": "random",
                             "choices": [i + "<br><font color='gray'><em>Translation:</em> " + translate(i) + "</font>" for i in line['choices']],
                             "correctAnswer": line['choices'][line['gold']] + "<br><font color='gray'><em>Translation:</em> " + translate(line['choices'][line['gold']]) + "</font>"})
-        with open(f"../benchmark_{YEAR}/CSJ.json", 'r', encoding='utf-8') as f:
+        with open(f"../benchmark_{YEAR}/CSJ.jsonl", 'r', encoding='utf-8') as f:
             for cnt, line in enumerate(f):
                 line = json.loads(line)
                 questions.append({"type": "radiogroup",

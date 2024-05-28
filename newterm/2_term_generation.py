@@ -9,12 +9,12 @@ if __name__ == "__main__":
         config = json.load(f)
 
     chat = MultiChat(config, 
-        save_path=f'buffer_{config["year"]}/word_generation_sim.json',
+        save_path=f'buffer_{config["year"]}/word_generation_sim.jsonl',
         model=config["model"],
         temperature=0
     )
     chat.start()
-    with open(f'benchmark_{config["year"]}/new_terms.txt', 'r', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/new_terms.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line)
             lsb = {
@@ -27,12 +27,12 @@ if __name__ == "__main__":
     chat.wait_finish()
 
     chat = MultiChat(config,
-        save_path=f'buffer_{config["year"]}/word_generation_synonym.json',
+        save_path=f'buffer_{config["year"]}/word_generation_synonym.jsonl',
         model=config["model"],
         temperature=0
     )
     chat.start()
-    with open(f'benchmark_{config["year"]}/new_terms.txt', 'r', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/new_terms.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line)
             lsb = {
@@ -45,12 +45,12 @@ if __name__ == "__main__":
     chat.wait_finish()
 
     chat = MultiChat(config,
-        save_path=f'buffer_{config["year"]}/word_generation_antonym.json',
+        save_path=f'buffer_{config["year"]}/word_generation_antonym.jsonl',
         model=config["model"],
         temperature=0
     )
     chat.start()
-    with open(f'benchmark_{config["year"]}/new_terms.txt', 'r', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/new_terms.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line)
             lsb = {
@@ -63,12 +63,12 @@ if __name__ == "__main__":
     chat.wait_finish()
 
     chat = MultiChat(config,
-        save_path=f'buffer_{config["year"]}/word_generation_guess.json',
+        save_path=f'buffer_{config["year"]}/word_generation_guess.jsonl',
         model=config["model_guess"],
         temperature=0
     )
     chat.start()
-    with open(f'benchmark_{config["year"]}/new_terms.txt', 'r', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/new_terms.jsonl', 'r', encoding='utf-8') as f:
         for line in f:
             line = json.loads(line)
             lsb = {
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     word_mem = defaultdict(list)
     for file in ['sim', 'synonym', 'antonym', 'guess']:
-        with open(f'buffer_{config["year"]}/word_generation_{file}.json', 'r', encoding='utf-8') as f:
+        with open(f'buffer_{config["year"]}/word_generation_{file}.jsonl', 'r', encoding='utf-8') as f:
             for line in f:
                 line = json.loads(line)
                 words = [re.sub(r"^\d+(\.\d*)*", "", i).strip() for i in line['response'].split('\n') if len(i.split()) <= 5]
@@ -92,7 +92,7 @@ if __name__ == "__main__":
                     word_mem[(line["term"], line["meaning"])].append(i)
 
     model = SentenceTransformer('whaleloops/phrase-bert').cuda()
-    with open(f'benchmark_{config["year"]}/term_generation.json', 'w', encoding='utf-8') as f:
+    with open(f'benchmark_{config["year"]}/term_generation.jsonl', 'w', encoding='utf-8') as f:
         for k, v in word_mem.items():
             phrases = filter_sim([k[1]] + v, 6, model, skip_id=[0])
             phrases.pop(0)
