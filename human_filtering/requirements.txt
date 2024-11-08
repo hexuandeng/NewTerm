@@ -1,0 +1,5 @@
+Flask
+Flask-Cors~=4.0.0
+loguru
+openai
+statsmodels

@@ -1,0 +1,10 @@
+loguru
+openai
+anthropic
+sentence-transformers~=2.2.2
+tokenizers~=0.13.3
+torch>=1.12.0
+torchaudio>=0.12.0
+torcheval~=0.0.7
+torchvision>=0.13.0
+fschat[model_worker,webui]
