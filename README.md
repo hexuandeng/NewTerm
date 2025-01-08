@@ -1,8 +1,13 @@
-# NewTerm: Benchmarking Real-Time New Terms for LLMs
+# NewTerm++: Evaluating and Improving LLMs on Real-Time New Terms
 
-This repository hosts the the code and benchmark for the paper "***NewTerm**: Benchmarking Real-Time New Terms for Large Language Models*". We've developed a highly automated pipeline for new term benchmarks, which requires minimal human intervention, ensuring high-quality and flexible updates for real-time information. Further, we construct **NewTerm 2022** and **NewTerm 2023**, focusing on new words, new phrases, and old words with new meanings, and will **continue updating annually**. You can use ***NewTerm*** to:
+This repository hosts the the code and benchmark for the paper "***NewTerm**: Benchmarking Real-Time New Terms for Large Language Models*" and "***NewTerm++**: Evaluating and Improving Large Language Models on Real-Time New Terms*". Our work not only evaluates the performance of LLMs on real-time new terms but also provides tools for enhancing their capabilities.
+
+We've developed a highly automated pipeline for new term benchmarks, which requires minimal human intervention, ensuring high-quality and flexible updates for real-time information. Further, we construct **NewTerm 2022** and **NewTerm 2023**, focusing on new words, new phrases, and old words with new meanings, and will **continue updating annually**. Additionally, we introduce an **enhancement framework** leveraging synthetic data generation and instruction tuning to improve LLMs on these challenging terms.
+
+You can use ***NewTerm*** to:
 
 - Assess the performance of existing LLMs using real-time new terms sourced from dictionaries.
+- Enhance LLMs by fine-tuning them with contextual examples of new terms.
 - Build your custom benchmark, targeting specific terms such as new annual terms, low-frequency words, low-resource languages, and literary or religious texts.
 - Use an interactive human filtering interface to create a higher-quality benchmark. This user-friendly interface requires human annotators to answer multiple-choice questions, making it suitable for crowdsourced annotators.
 
@@ -70,6 +75,28 @@ We evaluate various categories of LLMs. For detailed results and analysis, pleas
 ![](./pic/results.png)
 
 
+## Improving LLMs on Real-Time New Terms
+
+We provide a framework for improving large language models (LLMs) to understand new terms by incorporating contextual training during fine-tuning. The process avoids inference delays by using synthetic data generation to create examples of terms in context, followed by instruction tuning with LoRA to enhance generalization and minimize forgetting.
+
+Below is a visual overview of the workflow, illustrating how synthetic data generation and instruction tuning are combined to enhance model performance on new terms.
+
+![Workflow Overview](./pic/enhancement.png)
+
+To train your custom model and reproduce our results, please follow the environment setup instructions in the [ParroT](https://github.com/wxjiao/ParroT) repository. After configuring the environment, execute the provided script with the following command:
+
+```bash
+bash newterm/script/enhancement.sh
+```
+
+We also implement baseline methods for comparison:
+
+1. **Knowledge Editing (KE):** Available in the `baseline/KE` folder.
+2. **Retrieval-Augmented Generation (RAG):** Available in the `baseline/RAG` folder.
+
+Please refer to the respective directories for detailed instructions and scripts.
+
+
 ## Automatic Benchmark Construction
 
 You can automatically generate your own benchmark, focusing on any terms you are interested in. All you need to provide are the **terms** and their **corresponding meanings**. You can focus on terms added to the dictionary every year, low-frequency words, low-resource languages, or terms from literary or religious books.
@@ -103,7 +130,7 @@ ae    adv.: "In Māori contexts, used to indicate assent: 'yes'. Also as n.: an 
 
 Run a single command to complete the generation:
 ```bash
-bash newterm/generate.sh
+bash newterm/script/benchmark_generation.sh
 ```
 Results are in the benchmark_{year} folder, named by task for COMA, COST, and CSJ.
 

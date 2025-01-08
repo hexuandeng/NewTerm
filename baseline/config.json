@@ -1,0 +1,14 @@
+{
+    "__comment1__": "Keys",
+    "gpt-3.5_keys": ["sk-***", ["sk-***", "sk-***"]],
+    "gpt-4_keys": ["sk-***", ["sk-***", "sk-***"]],
+    "gpt-4o_keys": ["sk-***", ["sk-***", "sk-***"]],
+    "claude_keys": ["sk-***", ["sk-***", "sk-***"]],
+    "huggingface_key": "hf_***",
+    "embedding_key": "sk-***",
+    "cohere_key1": "***",
+    "cohere_key2": "***",
+
+    "__comment4__": "base",
+    "openai_base": "**"
+}

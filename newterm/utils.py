@@ -15,10 +15,11 @@ from loguru import logger
 from sentence_transformers.util import cos_sim
 from fastchat.conversation import get_conv_template
 from transformers import GenerationConfig
+from peft import PeftModel
 
 nlp = spacy.load("en_core_web_sm")
 
-def load_open_source(model_name):
+def load_open_source(model_name, lora_weights=None):
     with open("config.json", 'r', encoding='utf-8') as f:
         config = json.load(f)
     from huggingface_hub import login
@@ -26,7 +27,13 @@ def load_open_source(model_name):
     login(token=config["huggingface_key"])
     model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", trust_remote_code=True).half().eval()
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    return model, tokenizer
+    
+    flag = False
+    if lora_weights is not None and os.path.exists(lora_weights):
+        print(f'Loading LoRA weights from path: {lora_weights}')
+        model = PeftModel.from_pretrained(model, lora_weights, torch_dtype=torch.float16)
+        flag = True
+    return model, tokenizer, flag
 
 
 def get_response_open_source(prompt, model_name, model, tokenizer):
@@ -84,7 +91,7 @@ def llama_2_response(prompt, model, tokenizer):
     return tokenizer.decode(generation_tokens).rstrip('</s>')
 
 
-def llama_3_response(prompt, model, tokenizer):
+def llama_3_response(prompt, model, tokenizer, max_new_tokens=512):
     role = ['user', 'assistant']
     messages = [{"role": "system", "content": prompt[0]}]
     for cnt, i in enumerate(prompt[1: ]):
@@ -104,7 +111,7 @@ def llama_3_response(prompt, model, tokenizer):
         input_ids,
         num_beams=1,
         do_sample=False,
-        max_new_tokens=512,
+        max_new_tokens=max_new_tokens,
         eos_token_id=terminators
     )
     response = outputs[0][input_ids.shape[-1]:]

@@ -9,11 +9,12 @@ pattern = re.compile('[\W_]+')
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--year', type=str, default='2022', help='Which years of terms to test.')
+    parser.add_argument('--path', type=str, default='newterm', help='Which task to test.')
     args = parser.parse_args()
 
     by_model = defaultdict(lambda: defaultdict(list))
-    comas = sorted(glob.glob(f'newterm/results_{args.year}/COMA*.jsonl'))
-    costs = sorted(glob.glob(f'newterm/results_{args.year}/COST*.jsonl'))
+    comas = sorted(glob.glob(f'{args.path}/results_{args.year}/COMA*.jsonl'))
+    costs = sorted(glob.glob(f'{args.path}/results_{args.year}/COST*.jsonl'))
     for file in comas + costs:
         cor = inv = tot = 0
         with open(file, 'r', encoding='utf-8') as f:
@@ -44,24 +45,20 @@ if __name__ == "__main__":
                     if cnt != 1:
                         inv += 1
         if tot > 0:
-            # print(file, round(cor / tot * 100, 2), inv / tot)
-            model = file.split('/')[-1].split('_')[1]
-            if '_few_gold' in file:
-                by_model[model.rstrip('.jsonl')]["FEW_SHOT_GOLD"].append(cor / tot * 100)
-            elif '_few' in file:
-                by_model[model.rstrip('.jsonl')]["FEW_SHOT"].append(cor / tot * 100)
-            elif '_gold' in file:
-                by_model[model.rstrip('.jsonl')]["GOLD"].append(cor / tot * 100)
-            else:
-                by_model[model.rstrip('.jsonl')]["BASE"].append(cor / tot * 100)
+            model = file.removesuffix('.jsonl').split('/')[-1].split('_', 2)
+            if len(model) == 2:
+                model.append("base")
+            by_model[model[1]][model[2]].append(cor / tot * 100)
 
-    csjs = sorted(glob.glob(f'newterm/results_{args.year}/CSJ*.jsonl'))
+    csjs = sorted(glob.glob(f'{args.path}/results_{args.year}/CSJ*.jsonl'))
     for file in csjs:
-        cor = inv = tot = 0
+        cor = [0, 0]
+        inv = [0, 0]
+        tot = [0, 0]
         with open(file, 'r', encoding='utf-8') as f:
             for line in f:
                 line = json.loads(line)
-                tot += 1
+                tot[int(line['gold'])] += 1
                 right = ['YES', 'Yes', 'Correct', 'Acceptable']
                 wrong = ['NO', 'No', 'Incorrect', 'Unacceptable']
                 pre = None
@@ -73,24 +70,18 @@ if __name__ == "__main__":
                         if r in line['response']:
                             pre = 1
                 if pre == int(line['gold']):
-                    cor += 1
+                    cor[int(line['gold'])] += 1
                 if pre is None:
-                    inv += 1
-        if tot > 0:
-            # print(file, round(cor / tot * 100, 2), inv / tot)
-            model = file.split('/')[-1].split('_')[1]
-            if '_few_gold' in file:
-                by_model[model.rstrip('.jsonl')]["FEW_SHOT_GOLD"].append(cor / tot * 100)
-            elif '_few' in file:
-                by_model[model.rstrip('.jsonl')]["FEW_SHOT"].append(cor / tot * 100)
-            elif '_gold' in file:
-                by_model[model.rstrip('.jsonl')]["GOLD"].append(cor / tot * 100)
-            else:
-                by_model[model.rstrip('.jsonl')]["BASE"].append(cor / tot * 100)
+                    inv[int(line['gold'])] += 1
+        if tot[0] + tot[1] > 0:
+            model = file.removesuffix('.jsonl').split('/')[-1].split('_', 2)
+            if len(model) == 2:
+                model.append("base")
+            by_model[model[1]][model[2]].append((cor[0] / tot[0] + cor[1] / tot[1]) * 50)
 
     for k, v in by_model.items():
         for prompt, results in v.items():
             if len(results):
                 results += [sum(results) / len(results)]
             results = ['{:.2f}'.format(round(i, 2)) for i in results]
-            print(k, prompt, ' & '.join(results))
+            print(k, '&', prompt, '&', ' & '.join(results))

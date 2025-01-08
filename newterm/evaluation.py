@@ -4,8 +4,8 @@ import argparse
 from copy import deepcopy
 from utils import MultiChat, build_prompt, get_few_shot, get_response_open_source, load_open_source
 
-def test_open_source(task, prompt_type, model_name, year):
-    model, tokenizer = load_open_source(model_name)
+def test_open_source(task, prompt_type, model_name, year, lora_weights=None):
+    model, tokenizer, flag = load_open_source(model_name, lora_weights)
     if prompt_type == '_few_rand':
         few = []
         with open(f'benchmark_{year}/{task}_clean.jsonl', 'r', encoding='utf-8') as f:
@@ -13,8 +13,10 @@ def test_open_source(task, prompt_type, model_name, year):
                 line = json.loads(line.strip())
                 few.append(line)
     
+    output_file = f'newterm/results_{year}/{task}_{model_name.split("/")[-1]}{prompt_type}_LoRA.jsonl' if flag else \
+                  f'newterm/results_{year}/{task}_{model_name.split("/")[-1]}{prompt_type}.jsonl' 
     with open(f'benchmark_{year}/{task}_clean.jsonl', 'r', encoding='utf-8') as f,\
-        open(f'newterm/results_{year}/{task}_{model_name.split("/")[-1]}{prompt_type}.jsonl', 'w', encoding='utf-8') as w:
+        open(output_file, 'w', encoding='utf-8') as w:
         for line in f:
             line = json.loads(line.strip())
             for p in range(3):
@@ -38,7 +40,7 @@ def test_open_source(task, prompt_type, model_name, year):
                 lsb['response'] = get_response_open_source(prompt, model_name, model, tokenizer)
                 w.write(json.dumps(lsb, sort_keys=True, indent=0, ensure_ascii=False).replace("\n", " ") + "\n")
 
-def test_api(task, prompt_type, model_name, year):
+def test_api(task, prompt_type, model_name, year, *args):
     with open("config.json", 'r', encoding='utf-8') as f:
         config = json.load(f)
     chat = MultiChat(config,
@@ -83,6 +85,7 @@ if __name__ == '__main__':
     parser.add_argument('--prompt', type=str, choices=['BASE', 'GOLD', 'FEW_SHOT', 'FEW_SHOT_GOLD'], default='BASE', help='Which prompt method to use.')
     parser.add_argument('--model', type=str, default='gpt-3.5-turbo-0613', help='Which model to test.')
     parser.add_argument('--year', type=str, default='2022', help='Which year to test.')
+    parser.add_argument('--lora_weights', type=str, default=None, help='The path of lora weight')
 
     args = parser.parse_args()
     if not os.path.exists(f"newterm/results_{args.year}"):
@@ -96,6 +99,6 @@ if __name__ == '__main__':
     
     if args.task == 'ALL':
         for task in ['COMA', 'COST', 'CSJ']:
-            task_func(task, prompt_type, args.model, args.year)
+            task_func(task, prompt_type, args.model, args.year, args.lora_weights)
     else:
-        task_func(args.task, prompt_type, args.model, args.year)
+        task_func(args.task, prompt_type, args.model, args.year, args.lora_weights)

@@ -1,0 +1,12 @@
+{
+    "lora_r": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "lora_target_modules": [
+        "mlp.w1",
+        "mlp.w2",
+        "mlp.c_proj",
+        "attn.c_proj",
+        "attn.c_attn"
+    ]
+}
