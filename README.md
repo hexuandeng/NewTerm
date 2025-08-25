@@ -18,7 +18,7 @@ Our benchmark includes three open-domain NLU tasks. The cases for these tasks ar
 
 ## Large Language Models (LLMs) Evaluation
 
-We evaluate LLMs using our generated benchmarks, **NewTerm 2022** and **NewTerm 2023**, located in the [benchmark_2022](benchmark_2022/) and [benchmark_2023](benchmark_2023/) folder, respectively. These folders contain the following files:
+We evaluate LLMs using our generated benchmarks, **NewTerm 2022** and **NewTerm 2023**, located in the [benchmark\_2022](benchmark_2022/) and [benchmark\_2023](benchmark_2023/) folders, respectively. We have updated **NewTerm 2024** in the [benchmark\_2024](benchmark_2024/)folder, which covers newer terms, as well as **NewTerm Multi** in the [benchmark\_multi](benchmark_multi/) folder, which focuses on the challenges of new terms across more languages and targets terms from 2024 onward. These folders contain the following files:
 - new_terms.jsonl: Include the most challenging new terms we selected.
 - COMA.jsonl, COST.jsonl, and CSJ.jsonl: Include the automatically generated benchmarks, covering all three tasks defined in our paper.
 - COMA_clean.jsonl, COST_clean.jsonl, and CSJ_clean.jsonl: Include the benchmarks after human filtering.
