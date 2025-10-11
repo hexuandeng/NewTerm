@@ -1,5 +1,9 @@
 # NewTerm++: Evaluating and Improving LLMs on Real-Time New Terms
 
+:star: **NewTerm 2024 and Multilingual 2024 have been updated!** These datasets now cover new terms from **April 2024** to **March 2025**.
+* **NewTerm 2024**: Covers English only.
+* **Multilingual 2024**: Covers German, French, Italian, Spanish, Portuguese, Russian, Chinese, Japanese, Korean, and Catalan.
+
 This repository hosts the the code and benchmark for the paper "***NewTerm**: Benchmarking Real-Time New Terms for Large Language Models*" and "***NewTerm++**: Evaluating and Improving Large Language Models on Real-Time New Terms*". Our work not only evaluates the performance of LLMs on real-time new terms but also provides tools for enhancing their capabilities.
 
 We've developed a highly automated pipeline for new term benchmarks, which requires minimal human intervention, ensuring high-quality and flexible updates for real-time information. Further, we construct **NewTerm 2022** and **NewTerm 2023**, focusing on new words, new phrases, and old words with new meanings, and will **continue updating annually**. Additionally, we introduce an **enhancement framework** leveraging synthetic data generation and instruction tuning to improve LLMs on these challenging terms.
