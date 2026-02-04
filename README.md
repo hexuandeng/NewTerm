@@ -182,3 +182,22 @@ Now, you can interact with NewTerm through the provided interface. The website I
    - Answering page: We separate different tasks into different pages, with each page containing at most ten questions. Only one choice is allowed. If no choices are correct, please choose "None". If multiple choices are correct, please choose "Others" and manually input all the correct choices. Answers are saved after annotators finish any page, making it easy for them to skip and continue at any time.
       ![](./pic/interface2.png)
 4. After completing the annotation, use the [human_filtering](human_filtering/human_filtering.py) code to generate the final benchmark, stored in the benchmark_{year} folder with the suffix "_clean", as COMA_clean.jsonl, COST_clean.jsonl, and CSJ_clean.jsonl.
+
+## Citation
+
+If you find this work helpful, please consider citing as follows:
+
+```bibtex
+@inproceedings{NEURIPS2024_3eec719a,
+ author = {Deng, Hexuan and Jiao, Wenxiang and Liu, Xuebo and Zhang, Min and Tu, Zhaopeng},
+ booktitle = {Advances in Neural Information Processing Systems},
+ doi = {10.52202/079017-1128},
+ editor = {A. Globerson and L. Mackey and D. Belgrave and A. Fan and U. Paquet and J. Tomczak and C. Zhang},
+ pages = {35760--35795},
+ publisher = {Curran Associates, Inc.},
+ title = {NewTerm: Benchmarking Real-Time New Terms for Large Language Models with Annual Updates},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2024/file/3eec719ab86712d32b065c5977f94ad0-Paper-Datasets_and_Benchmarks_Track.pdf},
+ volume = {37},
+ year = {2024}
+}
+```
